@@ -57,7 +57,10 @@ download "http://firefox-boxes.github.io/get/boxes-ext-latest.xpi" ~/.FirefoxBox
 # Download startup agent plist file and add it to LaunchAgents
 prgreen "==> Set boxes-ipc to run on startup"
 download ""$DL_PREFIX"/StartupAgent.plist" ~/Library/LaunchAgents/io.github.firefox-boxes.boxes-ipc.plist
-nohup ~/.FirefoxBoxes/bin/boxes-ipc &
+STARTUP_AGENT="$(cat ~/Library/LaunchAgents/io.github.firefox-boxes.boxes-ipc.plist)"
+echo "${STARTUP_AGENT//"~"/$HOME}" > ~/Library/LaunchAgents/io.github.firefox-boxes.boxes-ipc.plist
+launchctl unload ~/Library/LaunchAgents/io.github.firefox-boxes.boxes-ipc.plist
+launchctl load ~/Library/LaunchAgents/io.github.firefox-boxes.boxes-ipc.plist
 
 # Add boxes-ext-native-shell as a native messaging target for Firefox
 prgreen "==> Add boxes as a native messaging target"
